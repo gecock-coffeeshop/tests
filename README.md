@@ -1,4 +1,9 @@
 # Integration tests for Coffeshop
 
-Run with `mvn verify`
+To run the tests:
+
+```
+export COFFEESHOP_URI=http://my-coffeeshop-host.com
+mvn verify
+```
 

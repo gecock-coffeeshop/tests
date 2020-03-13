@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class KafkaBaristaIT {
 
-    private final static String COFFEESHOP_UI_HOST = System.getenv("COFFEESHOP_UI_HOST");
+    private final static String COFFEESHOP_URI = System.getenv("COFFEESHOP_URI");
 
     @Test
     public void shouldMakeCoffeeWhenOrderedViaKafka() throws InterruptedException {
@@ -38,7 +38,7 @@ public class KafkaBaristaIT {
 
         Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
 
-        SseEventSource eventSource = SseEventSource.target(client.target(COFFEESHOP_UI_HOST + "/services/queue")).build();
+        SseEventSource eventSource = SseEventSource.target(client.target(COFFEESHOP_URI + "/services/queue")).build();
 
         AtomicReference<String> readyBeverageRef = new AtomicReference<>();
         eventSource.register(event -> {
@@ -49,7 +49,7 @@ public class KafkaBaristaIT {
             }
         });
 
-        Response response = client.target(COFFEESHOP_UI_HOST + "/services/messaging")
+        Response response = client.target(COFFEESHOP_URI + "/services/messaging")
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.json(order));
         assertThat(response.getStatus(),is(200));
