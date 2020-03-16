@@ -1,4 +1,9 @@
-# Integration tests for Coffeshop
+# Integration tests for Coffeeshop
 
-Run with `mvn verify`
+To build & run the tests in a local docker container:
 
+```
+docker build -t coffeeshop-integration .
+docker run -e COFFEESHOP_URI=http://my-coffeeshop-host coffeeshop-integration mvn verify
+```
+(replacing `my-coffeeshop-host` with the hostname of your coffeeshop service)
