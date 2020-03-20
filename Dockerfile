@@ -4,3 +4,5 @@ COPY src /project/src
 COPY pom.xml /project/pom.xml
 
 WORKDIR /project
+
+CMD ["mvn", "clean", "verify"]
