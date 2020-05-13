@@ -1,7 +1,7 @@
 package com.ibm.runtimes.events.coffeeshop;
 
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.junit.jupiter.api.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -9,9 +9,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.junit.jupiter.api.Test;
 
 public class BaristaHttpIT {
 
