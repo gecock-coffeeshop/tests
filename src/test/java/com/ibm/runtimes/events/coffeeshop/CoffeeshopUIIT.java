@@ -1,43 +1,59 @@
 package com.ibm.runtimes.events.coffeeshop;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import org.hamcrest.Matchers;
+import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CoffeeshopUIIT {
+    private static final String QUEUE_TABLE_FIRST_ROW = "//table/tbody/tr[1]";
     private static RemoteWebDriver driver;
 
     @BeforeAll
     public static void setupDriver() throws MalformedURLException {
-        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),DesiredCapabilities.chrome());
+        String seleniumHost = System.getenv("SELENIUM_URI");
+        if (seleniumHost == null) {
+            seleniumHost = "http://localhost:4444/wd/hub";
+        }
+        driver = new RemoteWebDriver(new URL(seleniumHost),DesiredCapabilities.chrome());
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 
     @Test
     public void ordersViaHttpShouldBeFulfilled() {
-        driver.get("http://coffeeshop-ui-coffeeshop.apps.nephew.os.fyre.ibm.com");
+        checkOrderIsFulfilled("HTTP", "IN_PROGRESS");
+
+    }
+
+    @Test
+    public void ordersViaKafkaShouldBeFulfilled() {
+        checkOrderIsFulfilled("Messaging / Kafka", "IN_QUEUE");
+    }
+
+    private void checkOrderIsFulfilled(String orderMethod, String expectedInProgressMessage) {
+        driver.get(System.getenv("COFFEESHOP_URI"));
         Select orderMethodDropdown = new Select(driver.findElementById("orderMethod"));
-        orderMethodDropdown.selectByVisibleText("HTTP");   
+        orderMethodDropdown.selectByVisibleText(orderMethod); 
         driver.findElementById("order-button").click();
 
-        WebElement queueTable = driver.findElementByCssSelector(".table");
-        WebElement firstRow = queueTable.findElement(By.tagName("tr"));
-        List<WebElement> cells = firstRow.findElements(By.tagName("td"));
-        assertThat(cells, hasItem(hasProperty("Text", equalTo("IN PROGRESS)"))));
-
-        // WebDriverWait wait = new WebDriverWait(driver,5);
-        // wait.until(driver -> driver.)
+        WebElement firstRow = driver.findElementByXPath(QUEUE_TABLE_FIRST_ROW);
+        assertThat(firstRow.getText(), StringContains.containsString(expectedInProgressMessage));
+    
+        WebDriverWait wait = new WebDriverWait(driver, 30);
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(QUEUE_TABLE_FIRST_ROW), "READY"));
     }
+     
 }
