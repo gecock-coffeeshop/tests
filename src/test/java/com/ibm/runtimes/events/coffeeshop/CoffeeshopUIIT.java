@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import org.hamcrest.Matchers;
 import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,7 @@ public class CoffeeshopUIIT {
     public static void setupDriver() throws MalformedURLException {
         String seleniumHost = System.getenv("SELENIUM_URI");
         if (seleniumHost == null) {
-            seleniumHost = "http://localhost:4444/wd/hub";
+            seleniumHost = "http://127.0.0.1:4444/wd/hub";
         }
         driver = new RemoteWebDriver(new URL(seleniumHost),DesiredCapabilities.chrome());
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -35,7 +34,6 @@ public class CoffeeshopUIIT {
     @Test
     public void ordersViaHttpShouldBeFulfilled() {
         checkOrderIsFulfilled("HTTP", "IN_PROGRESS");
-
     }
 
     @Test
@@ -49,8 +47,8 @@ public class CoffeeshopUIIT {
         orderMethodDropdown.selectByVisibleText(orderMethod); 
         driver.findElementById("order-button").click();
 
-        WebElement firstRow = driver.findElementByXPath(QUEUE_TABLE_FIRST_ROW);
-        assertThat(firstRow.getText(), StringContains.containsString(expectedInProgressMessage));
+        WebElement queueTablefirstRow = driver.findElementByXPath(QUEUE_TABLE_FIRST_ROW);
+        assertThat(queueTablefirstRow.getText(), StringContains.containsString(expectedInProgressMessage));
     
         WebDriverWait wait = new WebDriverWait(driver, 30);
         wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(QUEUE_TABLE_FIRST_ROW), "READY"));
