@@ -1,6 +1,7 @@
-# Integration tests for Coffeeshop
+# End-to-end tests for Coffee Shop demo
+This repo contains end to end tests for the Coffee Shop demo. They're written in Java using the JUnit test framework and run using Maven.  The UI tests use Selenium.
 
-These tests assume you've deployed the coffeeshop demo from https://github.ibm.com/appsody-coffeeshop/gitops-dev
+These tests assume you've deployed the coffeeshop demo from the [https://github.com/ibm-icpa-coffeeshop/gitops-dev](GitOps repo).
 
 To build the tests locally:
 
@@ -16,7 +17,9 @@ docker run -e COFFEESHOP_URI=http://my-coffeeshop-host coffeeshop-integration mv
 ```
 (replacing `my-coffeeshop-host` with the hostname of your coffeeshop service)
 
-With the coffeeshop demo deployed on OpenShift you can find out the hostname by running:
+With the Coffee Shop demo deployed on OpenShift you can find out the hostname by running:
 ```
 oc get route coffeeshop-ui -n coffeeshop
 ```
+
+The [pipeline repo](https://github.com/ibm-icpa-coffeeshop/pipeline) contains a Tekton task to run these tests after deployment. 
