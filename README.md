@@ -22,4 +22,4 @@ With the Coffee Shop demo deployed on OpenShift you can find out the hostname by
 oc get route coffeeshop-ui -n coffeeshop
 ```
 
-The [pipeline repo](https://github.com/ibm-icpa-coffeeshop/pipeline) contains a Tekton task to run these tests after deployment. 
+The [pipelines repo](https://github.com/ibm-icpa-coffeeshop/pipelines) contains a Tekton task to run these tests after deployment. 
