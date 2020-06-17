@@ -1,3 +1,6 @@
+/*
+ * (C) Copyright IBM Corp. 2020
+ */
 package com.ibm.runtimes.events.coffeeshop;
 
 import static org.junit.Assert.assertThat;
