@@ -1,7 +1,7 @@
 # End-to-end tests for Coffee Shop demo
 This repo contains end to end tests for the Coffee Shop demo. They're written in Java using the JUnit test framework and run using Maven.  The UI tests use Selenium.
 
-These tests assume you've deployed the coffeeshop demo from the [https://github.com/ibm-icpa-coffeeshop/gitops-dev](GitOps repo).
+These tests assume you've deployed the coffeeshop demo from the [GitOps repo](https://github.com/ibm-icpa-coffeeshop/gitops-dev).
 
 To build the tests locally:
 
